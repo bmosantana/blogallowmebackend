@@ -6,6 +6,6 @@ CREATE TABLE  noticias (
     titulo VARCHAR(255) NOT NULL,
     dt_criacao DATE NOT NULL,
     texto TEXT NOT NULL,
-    -- autor_id 
+    autor VARCHAR(255) NOT NULL
     
 );

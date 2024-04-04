@@ -13,7 +13,7 @@ const pool = new Pool({
     host: 'localhost',
     database: 'minha_api',
     password: 'sua_senha',
-    port: 5432,
+    port: 5432, //porta que  server sql está rodado
 });
 
 // analise do corpo da requisição
@@ -33,14 +33,23 @@ app.get('/noticias', async (req, res) => {
 
     } catch (err) {
         console.error('Erro ao buscar itens:', err);
-        res.status(500).json({message: 'Erro interno do servidor'})
+        res.status(500).json({ message: 'Erro interno do servidor' })
     }
 });
 
-app.get('/noticias/:id', async (req, res) => {
+//Post Method criado para facilitar inserção de novas noticias via postman
+app.post('/noticias', async (req, res) => {
+    const { titulo, dt_criacao, texto, autor } = req.body;
     try {
+        const client = await pool.connect();
+        const result = await client.query('INSERT INTO items(titulo, dt_criacao, texto, autor) VALUES($1, $2, $3, $4) RETURNING *', [titulo, dt_criacao, texto, autor]);
+        const newItem = result.rows[0];
 
-    } catch (error) {
+        client.release();
+        res.status(201).json(newItem);
 
+    } catch (err) {
+        console.error('Erro ao criar item: ',err);
+        res.status(400).json({message: 'Erro ao criar item.'});
     }
 });
