@@ -54,9 +54,8 @@ app.post('/noticias', async (req, res) => {
     }
 });
 
-
 //Get Item pelo Id único
-app.get('/items/:id', async (req, res) => {
+app.get('/noticias/:id', async (req, res) => {
     const id = req.params.id;
 
     try {
@@ -74,7 +73,42 @@ app.get('/items/:id', async (req, res) => {
 
     } catch (err) {
         console.error('Erro ao buscar item: ', err);
-        res.status(500).json({message: 'Erro interno do servidor.'});
+        res.status(500).json({ message: 'Erro interno do servidor.' });
     }
 });
 
+//Put para editar uma possivel noticia
+app.put('/noticias/:id', async (req, res) => {
+    const id = req.params.id;
+    const { titulo, dt_criacao, texto, autor } = req.body;
+    try {
+        const client = await pool.connect();
+        const result = await client.query('UPDATE noticias SET titulo = $1, dt_criacao = $2, texto = $3, autor = $4 WHERE id = $5 RETURNING *', [titulo, dt_criacao, texto, autor, id]);
+        const updatedItem = result.rows[0];
+
+        client.release();
+
+        if (updatedItem) {
+            res.json(updatedItem);
+        } else {
+            res.status(404).json({ message: 'Item não encontrado' });
+        }
+    } catch (err) {
+        console.error('Erro ao atualizar item:', err);
+        res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+});
+
+//Delete de Noticias pelo ID
+app.delete('/noticias/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const client = await pool.connect();
+        await client.query('DELETE FROM items WHERE id = $1', [id]);
+        client.release();
+        res.json({ message: 'Item deletado com sucesso' });
+    } catch (err) {
+        console.error('Erro ao deletar item:', err);
+        res.status(500).json({ message: 'Erro interno do servidor' });
+    }
+});
