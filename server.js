@@ -5,7 +5,8 @@ const { Pool } = require('pg');
 const app = express();
 
 // como criar um arquivo .env para configuração de portas e etc
-const PORT = process.env.PORT || 3000;
+//const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // configurando o Pool de conexão com o PostgreSQL
 const pool = new Pool({
@@ -13,7 +14,7 @@ const pool = new Pool({
     host: 'localhost',
     database: 'minha_api',
     password: 'sua_senha',
-    port: 5432, //porta que  server sql está rodado
+    port: this.PORT, //porta que  server sql está rodado (parão: 3000)
 });
 
 // analise do corpo da requisição
@@ -111,4 +112,9 @@ app.delete('/noticias/:id', async (req, res) => {
         console.error('Erro ao deletar item:', err);
         res.status(500).json({ message: 'Erro interno do servidor' });
     }
+});
+
+//Iniciando Servidor
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
