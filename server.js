@@ -2,6 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const { Pool } = require('pg');
 
+//githubpages
+const jsonServer = require('json-server');
+const server = jsonServer.create();
+const router = jsonServer.router('db.json');
+
+
+
 const app = express();
 
 // como criar um arquivo .env para configuração de portas e etc
@@ -117,4 +124,10 @@ app.delete('/noticias/:id', async (req, res) => {
 //Iniciando Servidor
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
+});
+
+//github pages
+server.use(router);
+server.listen(3000, () => {
+  console.log('JSON Server is running on port 3000');
 });
