@@ -1,5 +1,3 @@
-# blog allowme backend
-
 # Blog AllowMe Back-End
 
 API HTTP para o teste da Serasa/AllowMe, o qual foi proposto para a vaga de Engenheiro de Software FullStack.
