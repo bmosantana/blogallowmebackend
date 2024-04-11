@@ -2,12 +2,6 @@
 
 API HTTP para o teste da Serasa/AllowMe, o qual foi proposto para a vaga de Engenheiro de Software FullStack.
 
-## Table of Contents
-
-- [Instalação](#Instalação)
-- [Npm Scripts](#NpmScripts)
-- [Considerações Finais](#ConsideraçõesFinais)
-
 ## Instalação
 
 Para instalar o projeto em sua máquina, siga os proximos passos:
