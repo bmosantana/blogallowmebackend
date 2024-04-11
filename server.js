@@ -4,8 +4,7 @@ const { Pool } = require('pg');
 
 const app = express();
 
-// como criar um arquivo .env para configuração de portas e etc
-//const PORT = process.env.PORT || 3000;
+//Porta de "entrada" do banco de dados
 const PORT = 3000;
 
 // configurando o Pool de conexão com o PostgreSQL
@@ -20,9 +19,9 @@ const pool = new Pool({
 // analise do corpo da requisição
 app.use(bodyParser.json());
 
-// Rotas
+// Rotas da API
+//Get Method para listagem de todas as noticias cadastradas
 app.get('/noticias', async (req, res) => {
-    const { titulo, texto, dt_criacao } = req.body;
 
     try {
         const client = await pool.connect();
@@ -38,7 +37,7 @@ app.get('/noticias', async (req, res) => {
     }
 });
 
-//Post Method criado para facilitar inserção de novas noticias via postman
+//Post Method criado para facilitar inserção de novas noticias via postman e alimentar a base de dados
 app.post('/noticias', async (req, res) => {
     const { titulo, dt_criacao, texto, autor } = req.body;
     try {
@@ -55,7 +54,7 @@ app.post('/noticias', async (req, res) => {
     }
 });
 
-//Get Item pelo Id único
+//Get para buscar uma possivel noticia com base no ID
 app.get('/noticias/:id', async (req, res) => {
     const id = req.params.id;
 
@@ -78,7 +77,7 @@ app.get('/noticias/:id', async (req, res) => {
     }
 });
 
-//Put para editar uma possivel noticia
+//Put para editar uma noticia caso necessite
 app.put('/noticias/:id', async (req, res) => {
     const id = req.params.id;
     const { titulo, dt_criacao, texto, autor } = req.body;
@@ -100,7 +99,8 @@ app.put('/noticias/:id', async (req, res) => {
     }
 });
 
-//Delete de Noticias pelo ID
+//Delete de Noticias pelo ID 
+//Alteração Futura: adicionar "status" em noticias, para apenas desativar uma noticia
 app.delete('/noticias/:id', async (req, res) => {
     const id = req.params.id;
     try {
@@ -114,7 +114,8 @@ app.delete('/noticias/:id', async (req, res) => {
     }
 });
 
-//Iniciando Servidor
+
+//Iniciando Servidor da API
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}`);
 });
